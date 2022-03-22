@@ -27,9 +27,22 @@ describe("app", () => {
       },
     ];
 
+    
+
     await request(app)
       .get("/restaurants")
       .expect(200)
+      .expect((res) => {
+        expect(res.body).toEqual(expected);
+      });
+  });
+
+  test("GET /invalidurl should respond with 404 response", async () => {
+    const expected = { message: "page not found" };
+
+    await request(app)
+      .get("/invalidurl")
+      .expect(404)
       .expect((res) => {
         expect(res.body).toEqual(expected);
       });
