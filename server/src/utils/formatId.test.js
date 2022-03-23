@@ -14,6 +14,6 @@ describe("formatId", () => {
       placeholderProp2: "lorem ipsum",
     };
     const recieved = formatId(idFromMongoose);
-    expected(recieved).toEqual(expected);
+    expect(recieved).toEqual(expected);
   });
 });
