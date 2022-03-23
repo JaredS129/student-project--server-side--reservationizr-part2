@@ -11,4 +11,8 @@ app.get("/restaurants", async (req, res) => {
   return res.status(200).send(restaurants);
 });
 
+app.get("*", async (req, res) => {
+  return res.status(404).send({ message: "page not found" });
+});
+
 module.exports = app;
