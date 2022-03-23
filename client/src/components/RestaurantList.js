@@ -1,6 +1,7 @@
 import "./RestaurantList.css";
+import "../App.css";
 import { Link } from "react-router-dom";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 
 const RestaurantList = () => {
   const [restaurants, setRestaurants] = useState([]);
@@ -21,11 +22,19 @@ const RestaurantList = () => {
       <ul>
         {restaurants.map((restaurant) => {
           return (
-            <li key={restaurant.id}>
-              <img src={restaurant.image} alt={restaurant.name} />
-              <h2>{restaurant.name}</h2>
-              <p>{restaurant.description}</p>
-              <Link to={"restaurants/" + restaurant.id}>Reserve now →</Link>
+            <li key={restaurant.id} className="list-item">
+              <div className="restaurant-container">
+                <div className="img-container">
+                  <img src={restaurant.image} alt={restaurant.name} />
+                </div>
+                <aside className="restaurant-content">
+                  <h2 className="restaurant-name">{restaurant.name}</h2>
+                  <p className="description">{restaurant.description}</p>
+                  <Link to={"restaurants/" + restaurant.id}>
+                    <button className="button">Reserve now →</button>
+                  </Link>
+                </aside>
+              </div>
             </li>
           );
         })}

@@ -1,0 +1,26 @@
+.restaurant-container {
+  filter: drop-shadow(5px 4px 10px #bfbfbf);
+  background: white;
+  padding: 1rem;
+  margin-bottom: 3rem;
+  border-radius: 0.2rem;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.restaurant-name {
+  margin-bottom: 0.6rem;
+}
+
+.description {
+  margin-bottom: 1.5rem;
+}
+
+@media only screen and (min-width: 35rem) {
+  .restaurant-container {
+    grid-template-columns: 1fr 2fr;
+  }
+  .restaurant-content {
+    margin-left: 1.7rem;
+  }
+}
