@@ -46,4 +46,43 @@ describe("app", () => {
         expect(res.body).toEqual(expected);
       });
   });
+
+  test("GET /restaurants/:id should respond with a single restaurant", async () => {
+    const expected = {
+      id: "616005e26d59890f8f1e619b",
+      name: "Thai Isaan",
+      description:
+        "We offer guests a modern dining experience featuring the authentic taste of Thailand. Food is prepared fresh from quality ingredients and presented with sophisticated elegance in a stunning dining setting filled with all the richness of Thai colour, sound and art.",
+      image: "https://i.ibb.co/HPjd2jR/thai.jpg",
+    };
+
+    await request(app)
+      .get("/restaurants/616005e26d59890f8f1e619b")
+      .expect(200)
+      .expect((res) => {
+        expect(res.body).toEqual(expected);
+      });
+  });
+
+  test("GET /restaurants/:id should respond with 400 error code if id is invalid", async () => {
+    const expected = { message: "id provided is invalid" };
+
+    await request(app)
+      .get("/restaurants/invalidid")
+      .expect(400)
+      .expect((res) => {
+        expect(res.body).toEqual(expected);
+      });
+  });
+
+  test("GET /restaurants/:id should respond with 404 error code if id does not exist", async () => {
+    const expected = { message: "id not found" };
+
+    await request(app)
+      .get("/restaurants/616005e26d59890f8f1e619c")
+      .expect(404)
+      .expect((res) => {
+        expect(res.body).toEqual(expected);
+      });
+  });
 });

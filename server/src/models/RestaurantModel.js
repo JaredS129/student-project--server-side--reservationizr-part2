@@ -3,8 +3,8 @@ const { Schema } = mongoose;
 
 const restaurantSchema = new Schema({
   name: { type: String, required: true },
-  description: String,
-  Image: String,
+  description: { type: String, required: true },
+  Image: { type: String, required: true },
 });
 
 const Restaurant = mongoose.model("Restaurant", restaurantSchema);
