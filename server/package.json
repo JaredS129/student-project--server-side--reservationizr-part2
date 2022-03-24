@@ -33,6 +33,7 @@
     "supertest": "^6.1.6"
   },
   "dependencies": {
+    "celebrate": "^15.0.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-oauth2-jwt-bearer": "^1.1.0",

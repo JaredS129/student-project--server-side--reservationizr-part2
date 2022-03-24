@@ -4,6 +4,7 @@ const app = express();
 const RestaurantModel = require("./models/RestaurantModel");
 const validId = require("./utils/validId");
 const { auth } = require("express-oauth2-jwt-bearer");
+const { celebrate, Joi, errors, Segments } = require("celebrate");
 
 const checkJwt = auth({
   audience: "https://reservationizr.com",
