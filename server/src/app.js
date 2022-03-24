@@ -3,6 +3,12 @@ const cors = require("cors");
 const app = express();
 const RestaurantModel = require("./models/RestaurantModel");
 const validId = require("./utils/validId");
+const { auth } = require("express-oauth2-jwt-bearer");
+
+const checkJwt = auth({
+  audience: "https://reservationizr.com",
+  issuerBaseURL: `https://dev-j6gr4qvb.us.auth0.com/`,
+});
 
 app.use(cors());
 app.use(express.json());
