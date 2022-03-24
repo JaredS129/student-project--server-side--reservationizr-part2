@@ -1,0 +1,28 @@
+.single-restaurant {
+  padding: 1rem;
+  margin-bottom: 3rem;
+  border-radius: 0.2rem;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.single-restaurant-name {
+  margin-bottom: 0.8rem;
+}
+
+.single-restaurant-description {
+  margin-bottom: 1.5rem;
+}
+
+.restaurant-image {
+  margin-bottom: 0.5rem;
+}
+
+@media only screen and (min-width: 35rem) {
+  .single-restaurant {
+    grid-template-columns: 1fr 2fr;
+  }
+  .single-restaurant-content {
+    margin-left: 1.7rem;
+  }
+}
