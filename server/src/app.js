@@ -35,4 +35,31 @@ app.get("*", async (req, res) => {
   return res.status(404).send({ error: "page not found" });
 });
 
+app.post(
+    "/reservations",
+    checkJwt,
+    celebrate({
+      [Segments.BODY]: Joi.object().keys({
+        partySize: Joi.number().min(1).required(),
+        date: Joi.string().min(1).required(),
+        restaurantName: Joi.string().min(1).required(),
+      }),
+    }),
+    async (req, res, next) => {
+      try {
+        const { body, auth } = req;
+        const document = {
+          userId: auth.payload.sub,
+          ...body,
+        };
+        const reservation = new ReservationModel(document);
+        await reservation.save();
+        return res.status(201).send(reservation);
+      } catch (error) {
+        error.status = 400;
+        next(error);
+      }
+    }
+  );
+
 module.exports = app;

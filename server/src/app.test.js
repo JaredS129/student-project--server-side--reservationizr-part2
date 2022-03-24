@@ -85,4 +85,23 @@ describe("app", () => {
         expect(res.body).toEqual(expected);
       });
   });
+
+  test("POST /reservations creates a new reservation", async () => {
+    const expectedStatus = 201;
+    const body = {
+      partySize: 4,
+      date: "2023-11-17T06:30:00.000Z",
+      restaurantName: "Island Grill",
+    };
+
+    await request(app)
+      .post("/reservations")
+      .send(body)
+      .expect(expectedStatus)
+      .expect((response) => {
+        expect(response.body).toEqual(expect.objectContaining(body));
+        expect(response.body.id).toBeTruthy();
+        expect(response.body.userId).toBeTruthy();
+      });
+  });
 });
