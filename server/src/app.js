@@ -15,17 +15,17 @@ app.get("/restaurants", async (req, res) => {
 app.get("/restaurants/:id", async (req, res) => {
   const id = req.params.id;
   if (validId(id) === false) {
-    return res.status(400).send({ message: "id provided is invalid" });
+    return res.status(400).send({ error: "invalid id provided" });
   }
   const restaurant = await RestaurantModel.findById(id);
   if (restaurant === null) {
-    return res.status(404).send({ message: "id not found" });
+    return res.status(404).send({ error: "restaurant not found" });
   }
   return res.status(200).send(restaurant);
 });
 
 app.get("*", async (req, res) => {
-  return res.status(404).send({ message: "page not found" });
+  return res.status(404).send({ error: "page not found" });
 });
 
 module.exports = app;

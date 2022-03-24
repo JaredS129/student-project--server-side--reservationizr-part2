@@ -37,7 +37,7 @@ describe("app", () => {
   });
 
   test("GET /invalidurl should respond with 404 response", async () => {
-    const expected = { message: "page not found" };
+    const expected = { error: "page not found" };
 
     await request(app)
       .get("/invalidurl")
@@ -65,7 +65,7 @@ describe("app", () => {
   });
 
   test("GET /restaurants/:id should respond with 400 error code if id is invalid", async () => {
-    const expected = { message: "id provided is invalid" };
+    const expected = { error: "invalid id provided" };
 
     await request(app)
       .get("/restaurants/invalidid")
@@ -76,7 +76,7 @@ describe("app", () => {
   });
 
   test("GET /restaurants/:id should respond with 404 error code if id does not exist", async () => {
-    const expected = { message: "id not found" };
+    const expected = { error: "restaurant not found" };
 
     await request(app)
       .get("/restaurants/616005e26d59890f8f1e619c")

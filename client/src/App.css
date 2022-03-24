@@ -33,6 +33,7 @@ h1 {
 .error {
   font-weight: bold;
   color: red;
+  margin-bottom: 2rem;
 }
 
 .button {
