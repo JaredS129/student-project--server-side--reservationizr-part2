@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const RestaurantModel = require("./models/RestaurantModel");
+const ReservationModel = require("./models/ReservationModel");
 const validId = require("./utils/validId");
 const { auth } = require("express-oauth2-jwt-bearer");
 const { celebrate, Joi, errors, Segments } = require("celebrate");
@@ -36,30 +37,32 @@ app.get("*", async (req, res) => {
 });
 
 app.post(
-    "/reservations",
-    checkJwt,
-    celebrate({
-      [Segments.BODY]: Joi.object().keys({
-        partySize: Joi.number().min(1).required(),
-        date: Joi.string().min(1).required(),
-        restaurantName: Joi.string().min(1).required(),
-      }),
+  "/reservations",
+  checkJwt,
+  celebrate({
+    [Segments.BODY]: Joi.object().keys({
+      partySize: Joi.number().min(1).required(),
+      date: Joi.string().min(1).required(),
+      restaurantName: Joi.string().min(1).required(),
     }),
-    async (req, res, next) => {
-      try {
-        const { body, auth } = req;
-        const document = {
-          userId: auth.payload.sub,
-          ...body,
-        };
-        const reservation = new ReservationModel(document);
-        await reservation.save();
-        return res.status(201).send(reservation);
-      } catch (error) {
-        error.status = 400;
-        next(error);
-      }
+  }),
+  async (req, res, next) => {
+    try {
+      const { body, auth } = req;
+      const document = {
+        userId: auth.payload.sub,
+        ...body,
+      };
+      const reservation = new ReservationModel(document);
+      await reservation.save();
+      return res.status(201).send(reservation);
+    } catch (error) {
+      error.status = 400;
+      next(error);
     }
-  );
+  }
+);
+
+app.use(errors());
 
 module.exports = app;

@@ -1,6 +1,5 @@
 const request = require("supertest");
 const app = require("./app");
-const RestaurantModel = require("./models/RestaurantModel");
 
 describe("app", () => {
   test("GET /restaurants should respond with a list of restaurants", async () => {
@@ -102,6 +101,94 @@ describe("app", () => {
         expect(response.body).toEqual(expect.objectContaining(body));
         expect(response.body.id).toBeTruthy();
         expect(response.body.userId).toBeTruthy();
+      });
+  });
+
+  test("POST /reservations returns bad request if partySize is less than 1", async () => {
+    const expectedStatus = 400;
+    const body = {
+      partySize: 0,
+      date: "2023-11-17T06:30:00.000Z",
+      restaurantName: "Island Grill",
+    };
+    const expected = {
+      error: "Bad Request",
+      statusCode: 400,
+      error: "Bad Request",
+      message: "Validation failed",
+      validation: {
+        body: {
+          source: "body",
+          keys: ["partySize"],
+          message: '"partySize" must be greater than or equal to 1',
+        },
+      },
+    };
+
+    await request(app)
+      .post("/reservations")
+      .send(body)
+      .expect(expectedStatus)
+      .expect((res) => {
+        expect(res.body).toEqual(expected);
+      });
+  });
+
+  test("POST /reservations returns bad request if date is empty", async () => {
+    const expectedStatus = 400;
+    const body = {
+      partySize: 1,
+      date: "",
+      restaurantName: "Island Grill",
+    };
+    const expected = {
+      statusCode: 400,
+      error: "Bad Request",
+      message: "Validation failed",
+      validation: {
+        body: {
+          source: "body",
+          keys: ["date"],
+          message: '"date" is not allowed to be empty',
+        },
+      },
+    };
+
+    await request(app)
+      .post("/reservations")
+      .send(body)
+      .expect(expectedStatus)
+      .expect((res) => {
+        expect(res.body).toEqual(expected);
+      });
+  });
+
+  test("POST /reservations returns bad request if restaurantName is empty", async () => {
+    const expectedStatus = 400;
+    const body = {
+      partySize: 1,
+      date: "2023-11-17T06:30:00.000Z",
+      restaurantName: "",
+    };
+    const expected = {
+      statusCode: 400,
+      error: "Bad Request",
+      message: "Validation failed",
+      validation: {
+        body: {
+          source: "body",
+          keys: ["restaurantName"],
+          message: '"restaurantName" is not allowed to be empty',
+        },
+      },
+    };
+
+    await request(app)
+      .post("/reservations")
+      .send(body)
+      .expect(expectedStatus)
+      .expect((res) => {
+        expect(res.body).toEqual(expected);
       });
   });
 });
