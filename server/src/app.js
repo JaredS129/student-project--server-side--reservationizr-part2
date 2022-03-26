@@ -20,6 +20,13 @@ app.get("/restaurants", async (req, res) => {
   return res.status(200).send(restaurants);
 });
 
+app.get("/reservations", checkJwt, async (req, res) => {
+  const { auth } = req;
+  const userId = auth.payload.sub;
+  const reservations = await ReservationModel.find({ userId: userId });
+  return res.status(200).send(reservations);
+});
+
 app.get("/restaurants/:id", async (req, res) => {
   const id = req.params.id;
   if (validId(id) === false) {
@@ -42,7 +49,7 @@ app.post(
   celebrate({
     [Segments.BODY]: Joi.object().keys({
       partySize: Joi.number().min(1).required(),
-      date: Joi.date().greater("now").required(),
+      date: Joi.string().required(),
       restaurantName: Joi.string().min(1).required(),
     }),
   }),
