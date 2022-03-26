@@ -31,7 +31,7 @@ const Restaurant = () => {
     return (
       <>
         <p className="error">Sorry! We can't find that restaurant</p>
-        <BackButton />
+        <BackButton resource="restaurants" endpoint="/" />
       </>
     );
   }

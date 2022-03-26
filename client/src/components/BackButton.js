@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import "../App.css";
 
-const BackButton = () => {
+const BackButton = ({ resource, endpoint }) => {
   return (
     <p className="center">
-      <Link to="/">
-        <button className="button">&larr; Back to reservations</button>
+      <Link to={endpoint}>
+        <button className="button">&larr; Back to {resource}</button>
       </Link>
     </p>
   );
