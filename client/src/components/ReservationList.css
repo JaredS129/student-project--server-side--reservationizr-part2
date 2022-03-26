@@ -21,6 +21,9 @@
   border-top: 1px dashed grey;
   margin: 1.5rem 0;
 }
+.message {
+  margin-bottom: 0.9rem;
+}
 @media only screen and (min-width: 35rem) {
   .reservations-container {
     grid-template-columns: 1fr 1fr 1fr;
@@ -36,5 +39,8 @@
   .reservation-link {
     justify-self: right;
     margin-bottom: 0;
+  }
+  .align-left {
+    justify-self: left;
   }
 }

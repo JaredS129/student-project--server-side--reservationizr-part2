@@ -9,22 +9,33 @@ const ReservationList = () => {
   const [reservations, setReservations] = useState([]);
   const { getAccessTokenSilently } = useAuth0();
 
-  const fetchData = async () => {
-    const accessToken = await getAccessTokenSilently();
-    const response = await fetch("http://localhost:5001/reservations", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    const data = await response.json();
-    setReservations(data);
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      const accessToken = await getAccessTokenSilently();
+      const response = await fetch("http://localhost:5001/reservations", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      const data = await response.json();
+      setReservations(data);
+    };
+
     fetchData();
-  }, []);
+  }, [getAccessTokenSilently]);
+
+  if (reservations.length === 0) {
+    return (
+      <>
+        <p className="message">you don't have any reservations.</p>
+        <a className="reservation-link align-left" href="/">
+          View the restaurants
+        </a>
+      </>
+    );
+  }
 
   return (
     <>
