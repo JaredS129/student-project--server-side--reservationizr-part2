@@ -1,0 +1,26 @@
+.reservation-form {
+  padding: 1rem;
+}
+.reserve-title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.form-label {
+  display: block;
+  margin-bottom: 0.1rem;
+}
+.form-input {
+  padding: 0.4rem;
+  width: 100%;
+  margin-bottom: 1.8rem;
+  border-radius: 0.2rem;
+  border-style: solid;
+  border-color: lightgrey;
+}
+.form-input:focus {
+  outline: none !important;
+  border-color: rgb(255, 173, 67);
+}
+.creating {
+  background-color: rgb(77, 133, 77);
+}

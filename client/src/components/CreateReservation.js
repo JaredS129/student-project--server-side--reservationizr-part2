@@ -3,10 +3,15 @@ import { useNavigate, Link } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import { useAuth0 } from "@auth0/auth0-react";
 import "react-datepicker/dist/react-datepicker.css";
+import setHours from "date-fns/setHours";
+import setMinutes from "date-fns/setMinutes";
 import "./CreateReservation.css";
 
 const CreateReservation = ({ restaurantName }) => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(
+    setHours(setMinutes(new Date(), 0), 9)
+  );
+
   const [partySize, setPartySize] = useState(1);
   const [isPending, setIsPending] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -41,7 +46,7 @@ const CreateReservation = ({ restaurantName }) => {
     } else {
       alert("Reservation has been created");
       setIsPending(false);
-      navigate("/");
+      navigate("/reservations");
     }
   };
 
@@ -59,17 +64,17 @@ const CreateReservation = ({ restaurantName }) => {
   }
 
   return (
-    <>
-      <h2>Reserve {restaurantName}</h2>
-      <form onSubmit={handleSubmit} className="reservation-form">
+    <div className="reservation-form">
+      <h2 className="reserve-title">Reserve {restaurantName}</h2>
+      <form onSubmit={handleSubmit}>
         <label className="form-label" htmlFor="guests">
           Number of guests
         </label>
         <input
-          type="text"
+          type="number"
           id="guests"
           name="guests"
-          classname="form-input"
+          className="form-input"
           value={partySize}
           onChange={(e) => setPartySize(e.target.value)}
         />
@@ -79,9 +84,17 @@ const CreateReservation = ({ restaurantName }) => {
         <DatePicker
           id="date"
           name="date"
-          classname="form-input"
+          className="form-input"
           selected={selectedDate}
+          // CITATION:
+          // Description: disable manual typing in the date picker input field
+          // Title of post: "How to disable typing in React DatePicker".
+          // Date posted: September 8th, 2021
+          // URL: https://infinitbility.com/how-to-disable-typing-in-react-datepicker
+          onChangeRaw={(e) => e.preventDefault()}
           onChange={(date) => setSelectedDate(date)}
+          showTimeSelect
+          dateFormat="MM/dd/yyyy, h:mm aa"
         />
         {!isPending && (
           <button type="submit" className="button">
@@ -94,7 +107,7 @@ const CreateReservation = ({ restaurantName }) => {
           </button>
         )}
       </form>
-    </>
+    </div>
   );
 };
 
