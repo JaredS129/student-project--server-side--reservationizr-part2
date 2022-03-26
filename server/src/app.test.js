@@ -217,4 +217,56 @@ describe("app", () => {
         expect(res.body).toEqual(expected);
       });
   });
+
+  test("GET /reservations/:id should respond with a single reservation", async () => {
+    const expected = {
+      id: "614abf0a93e8e80ace792ac6",
+      partySize: 2,
+      date: "2023-12-03T07:00:00.000Z",
+      userId: "mock-user-id",
+      restaurantName: "Green Curry",
+    };
+
+    await request(app)
+      .get("/reservations/614abf0a93e8e80ace792ac6")
+      .expect(200)
+      .expect((res) => {
+        expect(res.body).toEqual(expected);
+      });
+  });
+
+  test("GET /reservations/:id should respond with 400 error code if id is invalid", async () => {
+    const expected = { error: "invalid id provided" };
+
+    await request(app)
+      .get("/reservations/invalidid")
+      .expect(400)
+      .expect((res) => {
+        expect(res.body).toEqual(expected);
+      });
+  });
+
+  test("GET /reservations/:id should respond with 404 error code if id does not exist", async () => {
+    const expected = { error: "not found" };
+
+    await request(app)
+      .get("/reservations/614abf0a93e8e80ace792ac7")
+      .expect(404)
+      .expect((res) => {
+        expect(res.body).toEqual(expected);
+      });
+  });
+
+  test("GET /reservations/:id should respond with 403 error code if the user is trying to access an id they did not create", async () => {
+    const expected = {
+      error: "user does not have permission to access this reservation",
+    };
+
+    await request(app)
+      .get("/reservations/61679189b54f48aa6599a7fd")
+      .expect(403)
+      .expect((res) => {
+        expect(res.body).toEqual(expected);
+      });
+  });
 });

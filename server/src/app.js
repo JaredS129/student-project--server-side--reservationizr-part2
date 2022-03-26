@@ -27,6 +27,25 @@ app.get("/reservations", checkJwt, async (req, res) => {
   return res.status(200).send(reservations);
 });
 
+app.get("/reservations/:id", checkJwt, async (req, res) => {
+  const { auth } = req;
+  const userId = auth.payload.sub;
+  const id = req.params.id;
+  if (validId(id) === false) {
+    return res.status(400).send({ error: "invalid id provided" });
+  }
+  const reservation = await ReservationModel.findById(id);
+  if (reservation === null) {
+    return res.status(404).send({ error: "not found" });
+  }
+  if (userId !== reservation.userId) {
+    return res.status(403).send({
+      error: "user does not have permission to access this reservation",
+    });
+  }
+  return res.status(200).send(reservation);
+});
+
 app.get("/restaurants/:id", async (req, res) => {
   const id = req.params.id;
   if (validId(id) === false) {
@@ -37,6 +56,10 @@ app.get("/restaurants/:id", async (req, res) => {
     return res.status(404).send({ error: "restaurant not found" });
   }
   return res.status(200).send(restaurant);
+});
+
+app.get("*", async (req, res) => {
+  return res.status(404).send({ error: "page not found" });
 });
 
 app.get("*", async (req, res) => {
