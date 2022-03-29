@@ -15,55 +15,76 @@ const checkJwt = auth({
 app.use(cors());
 app.use(express.json());
 
-app.get("/restaurants", async (req, res) => {
-  const restaurants = await RestaurantModel.find({});
-  return res.status(200).send(restaurants);
+app.get("/restaurants", async (req, res, next) => {
+  try {
+    const restaurants = await RestaurantModel.find({});
+    return res.status(200).send(restaurants);
+  } catch (error) {
+    error.status = 400;
+    next(error);
+  }
 });
 
-app.get("/reservations", checkJwt, async (req, res) => {
-  const { auth } = req;
-  const userId = auth.payload.sub;
-  const reservations = await ReservationModel.find({ userId: userId });
-  return res.status(200).send(reservations);
+app.get("/reservations", checkJwt, async (req, res, next) => {
+  try {
+    const { auth } = req;
+    const userId = auth.payload.sub;
+    const reservations = await ReservationModel.find({ userId: userId });
+    return res.status(200).send(reservations);
+  } catch (error) {
+    error.status = 400;
+    next(error);
+  }
 });
 
-app.get("/reservations/:id", checkJwt, async (req, res) => {
-  const { auth } = req;
-  const userId = auth.payload.sub;
-  const id = req.params.id;
-  if (validId(id) === false) {
-    return res.status(400).send({ error: "invalid id provided" });
+app.get("/reservations/:id", checkJwt, async (req, res, next) => {
+  try {
+    const { auth } = req;
+    const userId = auth.payload.sub;
+    const id = req.params.id;
+    if (validId(id) === false) {
+      return res.status(400).send({ error: "invalid id provided" });
+    }
+    const reservation = await ReservationModel.findById(id);
+    if (reservation === null) {
+      return res.status(404).send({ error: "not found" });
+    }
+    if (userId !== reservation.userId) {
+      return res.status(403).send({
+        error: "user does not have permission to access this reservation",
+      });
+    }
+    return res.status(200).send(reservation);
+  } catch (error) {
+    error.status = 400;
+    next(error);
   }
-  const reservation = await ReservationModel.findById(id);
-  if (reservation === null) {
-    return res.status(404).send({ error: "not found" });
-  }
-  if (userId !== reservation.userId) {
-    return res.status(403).send({
-      error: "user does not have permission to access this reservation",
-    });
-  }
-  return res.status(200).send(reservation);
 });
 
-app.get("/restaurants/:id", async (req, res) => {
-  const id = req.params.id;
-  if (validId(id) === false) {
-    return res.status(400).send({ error: "invalid id provided" });
+app.get("/restaurants/:id", async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    if (validId(id) === false) {
+      return res.status(400).send({ error: "invalid id provided" });
+    }
+    const restaurant = await RestaurantModel.findById(id);
+    if (restaurant === null) {
+      return res.status(404).send({ error: "restaurant not found" });
+    }
+    return res.status(200).send(restaurant);
+  } catch (error) {
+    error.status = 400;
+    next(error);
   }
-  const restaurant = await RestaurantModel.findById(id);
-  if (restaurant === null) {
-    return res.status(404).send({ error: "restaurant not found" });
-  }
-  return res.status(200).send(restaurant);
 });
 
-app.get("*", async (req, res) => {
-  return res.status(404).send({ error: "page not found" });
-});
-
-app.get("*", async (req, res) => {
-  return res.status(404).send({ error: "page not found" });
+app.get("*", async (req, res, next) => {
+  try {
+    return res.status(404).send({ error: "page not found" });
+  } catch (error) {
+    error.status = 400;
+    next(error);
+  }
 });
 
 app.post(
@@ -86,6 +107,26 @@ app.post(
       const reservation = new ReservationModel(document);
       await reservation.save();
       return res.status(201).send(reservation);
+    } catch (error) {
+      error.status = 400;
+      next(error);
+    }
+  }
+);
+
+app.post(
+  "/*",
+  checkJwt,
+  celebrate({
+    [Segments.BODY]: Joi.object().keys({
+      partySize: Joi.number().min(1).required(),
+      date: Joi.string().required(),
+      restaurantName: Joi.string().min(1).required(),
+    }),
+  }),
+  async (req, res, next) => {
+    try {
+      return res.status(404).send({ error: "endpoint not found" });
     } catch (error) {
       error.status = 400;
       next(error);

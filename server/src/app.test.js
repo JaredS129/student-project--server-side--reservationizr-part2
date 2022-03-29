@@ -114,7 +114,6 @@ describe("app", () => {
     const expected = {
       error: "Bad Request",
       statusCode: 400,
-      error: "Bad Request",
       message: "Validation failed",
       validation: {
         body: {
@@ -185,6 +184,26 @@ describe("app", () => {
 
     await request(app)
       .post("/reservations")
+      .send(body)
+      .expect(expectedStatus)
+      .expect((res) => {
+        expect(res.body).toEqual(expected);
+      });
+  });
+
+  it("should return 404 with error message if endpoint being posted to does not exist", async () => {
+    const expectedStatus = 404;
+    const body = {
+      partySize: 1,
+      date: "2023-11-17T06:30:00.000Z",
+      restaurantName: "Island Grill",
+    };
+    const expected = {
+      error: "endpoint not found",
+    };
+
+    await request(app)
+      .post("/*")
       .send(body)
       .expect(expectedStatus)
       .expect((res) => {
