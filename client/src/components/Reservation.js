@@ -34,6 +34,10 @@ const Reservation = () => {
     fetchData();
   }, [id, getAccessTokenSilently]);
 
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
   if (isNotFound) {
     return (
       <>
@@ -47,7 +51,7 @@ const Reservation = () => {
     <>
       <h1>Reservation</h1>
       <h2>{reservation.restaurantName}</h2>
-      <p>{reservation.date}</p>
+      <p>{formatDate(reservation.date)}</p>
       <p>
         <strong>Party size: </strong>4
       </p>

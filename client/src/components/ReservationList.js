@@ -8,6 +8,7 @@ import { formatDate } from "../utils/formatDate";
 const ReservationList = () => {
   const [reservations, setReservations] = useState([]);
   const { getAccessTokenSilently } = useAuth0();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,10 +22,15 @@ const ReservationList = () => {
       });
       const data = await response.json();
       setReservations(data);
+      setIsLoading(false);
     };
 
     fetchData();
   }, [getAccessTokenSilently]);
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   if (reservations.length === 0) {
     return (

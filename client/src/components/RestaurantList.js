@@ -5,16 +5,22 @@ import React, { useState, useEffect } from "react";
 
 const RestaurantList = () => {
   const [restaurants, setRestaurants] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchData = async () => {
     const response = await fetch("http://localhost:5001/restaurants");
     const data = await response.json();
     setRestaurants(data);
+    setIsLoading(false);
   };
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <>
