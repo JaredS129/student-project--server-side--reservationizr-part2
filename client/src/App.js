@@ -7,6 +7,7 @@ import Reservation from "./components/Reservation";
 import ReservationList from "./components/ReservationList";
 import RestaurantList from "./components/RestaurantList";
 import Restaurant from "./components/Restaurant";
+import NotFound from "./components/NotFound";
 
 const App = () => {
   const { isLoading } = useAuth0();
@@ -29,6 +30,7 @@ const App = () => {
             <Route path="/reservations" element={<ReservationList />} />
           </Route>
           <Route path="/" element={<RestaurantList />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </>

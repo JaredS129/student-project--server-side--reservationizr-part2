@@ -5,7 +5,7 @@ const BackButton = ({ resource, endpoint }) => {
   return (
     <p className="center">
       <Link to={endpoint}>
-        <button className="button">&larr; Back to {resource}</button>
+        <button className="button grey">&larr; Back to {resource}</button>
       </Link>
     </p>
   );

@@ -1,0 +1,20 @@
+.grey {
+  background-color: lightgrey;
+  color: black;
+}
+.single-reservation-heading {
+  margin-bottom: 1.5rem;
+}
+.single-reservation-name {
+  margin-bottom: 1.5rem;
+}
+.single-reservation-date {
+  margin-bottom: 1rem;
+}
+.single-reservation-party {
+  margin-bottom: 2.5rem;
+}
+.single-reservation-divider {
+  border-top: 1px dashed grey;
+  margin-bottom: 2.5rem;
+}

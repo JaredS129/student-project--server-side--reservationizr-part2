@@ -191,6 +191,207 @@ describe("app", () => {
       });
   });
 
+  test("POST /reservations returns bad request if user includes an invalid object key", async () => {
+    const expectedStatus = 400;
+    const body = {
+      partySize: 4,
+      date: "2023-11-17T06:30:00.000Z",
+      restaurantName: "Island Grill",
+      newKey: "newProp",
+    };
+    const expected = {
+      statusCode: 400,
+      error: "Bad Request",
+      message: "Validation failed",
+      validation: {
+        body: {
+          source: "body",
+          keys: ["newKey"],
+          message: '"newKey" is not allowed',
+        },
+      },
+    };
+
+    await request(app)
+      .post("/reservations")
+      .send(body)
+      .expect(expectedStatus)
+      .expect((res) => {
+        expect(res.body).toEqual(expected);
+      });
+  });
+
+  test("POST /reservations returns bad request if restaurantName is missing", async () => {
+    const expectedStatus = 400;
+    const body = {
+      partySize: 4,
+      date: "2023-11-17T06:30:00.000Z",
+    };
+    const expected = {
+      statusCode: 400,
+      error: "Bad Request",
+      message: "Validation failed",
+      validation: {
+        body: {
+          source: "body",
+          keys: ["restaurantName"],
+          message: '"restaurantName" is required',
+        },
+      },
+    };
+
+    await request(app)
+      .post("/reservations")
+      .send(body)
+      .expect(expectedStatus)
+      .expect((res) => {
+        expect(res.body).toEqual(expected);
+      });
+  });
+
+  test("POST /reservations returns bad request if date is missing", async () => {
+    const expectedStatus = 400;
+    const body = {
+      partySize: 4,
+      restaurantName: "Island Grill",
+    };
+    const expected = {
+      statusCode: 400,
+      error: "Bad Request",
+      message: "Validation failed",
+      validation: {
+        body: {
+          source: "body",
+          keys: ["date"],
+          message: '"date" is required',
+        },
+      },
+    };
+
+    await request(app)
+      .post("/reservations")
+      .send(body)
+      .expect(expectedStatus)
+      .expect((res) => {
+        expect(res.body).toEqual(expected);
+      });
+  });
+
+  test("POST /reservations returns bad request if partySize is missing", async () => {
+    const expectedStatus = 400;
+    const body = {
+      date: "2023-11-17T06:30:00.000Z",
+      restaurantName: "Island Grill",
+    };
+    const expected = {
+      statusCode: 400,
+      error: "Bad Request",
+      message: "Validation failed",
+      validation: {
+        body: {
+          source: "body",
+          keys: ["partySize"],
+          message: '"partySize" is required',
+        },
+      },
+    };
+
+    await request(app)
+      .post("/reservations")
+      .send(body)
+      .expect(expectedStatus)
+      .expect((res) => {
+        expect(res.body).toEqual(expected);
+      });
+  });
+
+  test("POST /reservations returns bad request if partySize is not a number", async () => {
+    const expectedStatus = 400;
+    const body = {
+      partySize: "string",
+      date: "2023-11-17T06:30:00.000Z",
+      restaurantName: "Island Grill",
+    };
+    const expected = {
+      statusCode: 400,
+      error: "Bad Request",
+      message: "Validation failed",
+      validation: {
+        body: {
+          source: "body",
+          keys: ["partySize"],
+          message: '"partySize" must be a number',
+        },
+      },
+    };
+
+    await request(app)
+      .post("/reservations")
+      .send(body)
+      .expect(expectedStatus)
+      .expect((res) => {
+        expect(res.body).toEqual(expected);
+      });
+  });
+
+  test("POST /reservations returns bad request if date is not a string", async () => {
+    const expectedStatus = 400;
+    const body = {
+      partySize: 4,
+      date: 100,
+      restaurantName: "Island Grill",
+    };
+    const expected = {
+      statusCode: 400,
+      error: "Bad Request",
+      message: "Validation failed",
+      validation: {
+        body: {
+          source: "body",
+          keys: ["date"],
+          message: '"date" must be a string',
+        },
+      },
+    };
+
+    await request(app)
+      .post("/reservations")
+      .send(body)
+      .expect(expectedStatus)
+      .expect((res) => {
+        expect(res.body).toEqual(expected);
+      });
+  });
+
+  test("POST /reservations returns bad request if restaurantName is not a string", async () => {
+    const expectedStatus = 400;
+    const body = {
+      partySize: 4,
+      date: "2023-11-17T06:30:00.000Z",
+      restaurantName: 100,
+    };
+    const expected = {
+      statusCode: 400,
+      error: "Bad Request",
+      message: "Validation failed",
+      validation: {
+        body: {
+          source: "body",
+          keys: ["restaurantName"],
+          message: '"restaurantName" must be a string',
+        },
+      },
+    };
+
+    await request(app)
+      .post("/reservations")
+      .send(body)
+      .expect(expectedStatus)
+      .expect((res) => {
+        expect(res.body).toEqual(expected);
+      });
+  });
+
   it("should return 404 with error message if endpoint being posted to does not exist", async () => {
     const expectedStatus = 404;
     const body = {

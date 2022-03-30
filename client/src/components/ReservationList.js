@@ -35,6 +35,7 @@ const ReservationList = () => {
   if (reservations.length === 0) {
     return (
       <>
+        <h1>Upcoming reservations</h1>
         <p className="message">you don't have any reservations.</p>
         <a className="reservation-link align-left" href="/">
           View the restaurants
@@ -57,12 +58,9 @@ const ReservationList = () => {
                 <p className="reservation-date">
                   {formatDate(reservation.date)}
                 </p>
-                <a
-                  href={"reservations/" + reservation.id}
-                  className="reservation-link"
-                >
+                <Link to={reservation.id} className="reservation-link">
                   View details →
-                </a>
+                </Link>
               </div>
               <hr className="reservation-divider" />
             </li>

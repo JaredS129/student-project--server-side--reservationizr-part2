@@ -25,6 +25,7 @@ const Reservation = () => {
       });
       if (response.ok === false) {
         setIsNotFound(true);
+        setIsLoading(false);
         return;
       }
       const data = await response.json();
@@ -49,13 +50,15 @@ const Reservation = () => {
 
   return (
     <>
-      <h1>Reservation</h1>
-      <h2>{reservation.restaurantName}</h2>
-      <p>{formatDate(reservation.date)}</p>
-      <p>
-        <strong>Party size: </strong>4
+      <h1 className="single-reservation-heading">Reservation</h1>
+      <h2 className="single-reservation-name">{reservation.restaurantName}</h2>
+      <p className="single-reservation-date">{formatDate(reservation.date)}</p>
+      <p className="single-reservation-party">
+        <strong>Party size: </strong>
+        {reservation.partySize}
       </p>
-      <hr />
+      <hr className="single-reservation-divider" />
+      <BackButton resource="reservations" endpoint="/reservations" />
     </>
   );
 };
