@@ -15,7 +15,7 @@ const Reservation = () => {
   useEffect(() => {
     const fetchData = async () => {
       const accessToken = await getAccessTokenSilently();
-      const fetchUrl = `http://localhost:5001/reservations/${id}`;
+      const fetchUrl = `${process.env.REACT_APP_API_URL}/reservations/${id}`;
       const response = await fetch(fetchUrl, {
         method: "GET",
         headers: {

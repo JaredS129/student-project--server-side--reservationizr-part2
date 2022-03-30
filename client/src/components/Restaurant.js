@@ -12,7 +12,7 @@ const Restaurant = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const fetchUrl = `http://localhost:5001/restaurants/${id}`;
+      const fetchUrl = `${process.env.REACT_APP_API_URL}/restaurants/${id}`;
       const response = await fetch(fetchUrl);
 
       if (response.ok === false) {
