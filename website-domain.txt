@@ -1,4 +1,4 @@
 Add your deployed website domain's / URL's below
 
-React application URL / domain:
-API URL / domain:
+React application URL / domain: https://tranquil-starship-19bfa2.netlify.app/
+API URL / domain: https://reservationizr-jstevenson.herokuapp.com/
